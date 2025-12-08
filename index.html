@@ -481,7 +481,7 @@
     ========================================== */
     .logo-divider {
       position: relative;
-      padding: 4rem 2rem;
+      padding: 1.5rem 1rem;
       z-index: 10;
       display: flex;
       align-items: center;
@@ -490,11 +490,11 @@
     }
     
     .logo-divider-svg {
-      width: clamp(400px, 60vw, 800px);
+      width: clamp(150px, 25vw, 250px);
       height: auto;
-      opacity: 0.9;
+      opacity: 0.8;
       animation: logoDividerPulse 4s ease-in-out infinite, logoDividerSpin 60s linear infinite;
-      filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
     }
     
     @keyframes logoDividerPulse {
@@ -549,13 +549,24 @@
     /* LiquidGlass Card */
     .liquid-glass {
       position: relative;
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 20px;
       overflow: hidden;
       transition: all 0.3s ease;
-      min-height: 200px;
+      min-height: 160px;
       display: flex;
       flex-direction: column;
+    }
+    
+    .liquid-glass .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .liquid-glass .card-header h3 {
+      margin: 0;
     }
     
     .liquid-glass::before {
@@ -574,27 +585,27 @@
     }
     
     .liquid-glass .icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 12px;
       background: linear-gradient(135deg, color-mix(in srgb, var(--teal) 25%, transparent) 0%, color-mix(in srgb, var(--teal) 15%, transparent) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1.25rem;
       color: var(--teal);
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       overflow: hidden;
     }
     
     .liquid-glass .icon img {
-      width: 42px;
-      height: 42px;
+      width: 32px;
+      height: 32px;
       object-fit: contain;
     }
     
     .feature-suit {
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: var(--color-accent-1);
       transition: transform 0.3s ease;
     }
@@ -633,6 +644,94 @@
       color: var(--teal);
       padding: 0.15rem 0.5rem;
       border-radius: 4px;
+    }
+    
+    /* ==========================================
+       SCREENSHOT CAROUSEL
+    ========================================== */
+    .screenshot-section {
+      position: relative;
+      padding: 3rem 2rem;
+      z-index: 10;
+    }
+    
+    .screenshot-section h2 {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--color-accent-1);
+      margin-bottom: 2rem;
+    }
+    
+    .carousel-container {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .carousel-slide {
+      min-width: 100%;
+      position: relative;
+    }
+    
+    .carousel-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      background: rgba(0, 0, 0, 0.6);
+      color: var(--color-accent-1);
+      font-size: 1.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+    
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      border-color: var(--color-accent-1);
+    }
+    
+    .carousel-btn.prev { left: 1rem; }
+    .carousel-btn.next { right: 1rem; }
+    
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .carousel-dot.active {
+      background: var(--color-accent-1);
     }
     
     /* ==========================================
@@ -764,41 +863,73 @@
       
       <div class="features-grid">
         <div class="liquid-glass">
-          <div class="icon"><img id="feature-chipstack-large" src="assets/chipstack/50.svg" alt="Chips"></div>
-          <h3>Provably Fair Shuffling</h3>
+          <div class="card-header">
+            <div class="icon"><img id="feature-chipstack-large" src="assets/chipstack/50.svg" alt="Chips"></div>
+            <h3>Provably Fair Shuffling</h3>
+          </div>
           <p>Our algorithm seeds from <code>Twitch frame hashes</code> – entropy you can verify. No more "rigged" accusations.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon"><img id="feature-chipstack-small" src="assets/chipstack/21.svg" alt="Chips"></div>
-          <h3>Complete Data Tracking</h3>
+          <div class="card-header">
+            <div class="icon"><img id="feature-chipstack-small" src="assets/chipstack/21.svg" alt="Chips"></div>
+            <h3>Complete Data Tracking</h3>
+          </div>
           <p>Every hand, every decision, every result. Encoded with a custom algorithm that compresses <code>MB → KB</code>.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon"><img src="assets/cards/back.png" alt="Card"></div>
-          <h3>AI-Powered Analysis</h3>
+          <div class="card-header">
+            <div class="icon"><img src="assets/cards/back.png" alt="Card"></div>
+            <h3>AI-Powered Analysis</h3>
+          </div>
           <p>LLM-chain powered breakdowns of your play. Not generic tips – analysis of <em>your</em> actual hands.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon"><img src="assets/cards/spades_A.png" alt="Ace"></div>
-          <h3>Friends, Clubs, Community</h3>
+          <div class="card-header">
+            <div class="icon"><img src="assets/cards/spades_A.png" alt="Ace"></div>
+            <h3>Friends, Clubs, Community</h3>
+          </div>
           <p>Play with anyone, anywhere, anytime. Private clubs, friend lists, and social features built in.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon"><span id="feature-suit-black" class="feature-suit">♠</span></div>
-          <h3>Real Analytics Dashboard</h3>
+          <div class="card-header">
+            <div class="icon"><span id="feature-suit-black" class="feature-suit">♠</span></div>
+            <h3>Real Analytics Dashboard</h3>
+          </div>
           <p>VPIP, PFR, aggression factor, positional stats. Every metric tracked and visualized beautifully.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon"><span id="feature-suit-red" class="feature-suit red">♥</span></div>
-          <h3>Learning Center</h3>
+          <div class="card-header">
+            <div class="icon"><span id="feature-suit-red" class="feature-suit red">♥</span></div>
+            <h3>Learning Center</h3>
+          </div>
           <p>Interactive lessons, practice scenarios, AI coaching. Master fundamentals and advanced concepts.</p>
         </div>
       </div>
+    </section>
+    
+    <!-- Screenshot Carousel -->
+    <section class="screenshot-section">
+      <h2>See It In Action</h2>
+      <div class="carousel-container">
+        <div class="carousel-track" id="carousel-track">
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130201.png" alt="PokerGeek Screenshot 1"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130342.png" alt="PokerGeek Screenshot 2"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130412.png" alt="PokerGeek Screenshot 3"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130442.png" alt="PokerGeek Screenshot 4"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130504.png" alt="PokerGeek Screenshot 5"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130529.png" alt="PokerGeek Screenshot 6"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130558.png" alt="PokerGeek Screenshot 7"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130616.png" alt="PokerGeek Screenshot 8"></div>
+        </div>
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
+        <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots"></div>
     </section>
     
     <!-- Footer -->
@@ -1163,6 +1294,42 @@
         button.textContent = 'Join Waitlist';
       }
     });
+    
+    // ===========================================
+    // SCREENSHOT CAROUSEL
+    // ===========================================
+    const track = document.getElementById('carousel-track');
+    const dotsContainer = document.getElementById('carousel-dots');
+    const slides = document.querySelectorAll('.carousel-slide');
+    let currentSlide = 0;
+    
+    // Create dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    });
+    
+    function updateCarousel() {
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+    
+    function moveCarousel(dir) {
+      currentSlide = (currentSlide + dir + slides.length) % slides.length;
+      updateCarousel();
+    }
+    
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+    
+    // Auto-advance every 5 seconds
+    setInterval(() => moveCarousel(1), 5000);
   </script>
 </body>
 </html>
