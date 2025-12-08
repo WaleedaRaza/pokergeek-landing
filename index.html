@@ -226,10 +226,10 @@
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
     
-    .theme-btn[data-theme="casino"] { background: #004433; }
-    .theme-btn[data-theme="dev"] { background: linear-gradient(135deg, #020015 0%, #ff4400 100%); }
-    .theme-btn[data-theme="high-roller"] { background: linear-gradient(135deg, #000 0%, #ff0000 100%); }
-    .theme-btn[data-theme="matric"] { background: linear-gradient(135deg, #000 0%, #00ff00 100%); }
+    .theme-btn[data-theme="casino"] { background: #00523e; }
+    .theme-btn[data-theme="dev"] { background: #ff4e00; }
+    .theme-btn[data-theme="high-roller"] { background: #1a1a1a; border: 2px solid #333; }
+    .theme-btn[data-theme="matric"] { background: #00ff19; }
     
     /* ==========================================
        HERO SECTION
@@ -584,6 +584,23 @@
       margin-bottom: 1.25rem;
       color: var(--teal);
       font-size: 1.75rem;
+      overflow: hidden;
+    }
+    
+    .liquid-glass .icon img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+    
+    .feature-suit {
+      font-size: 2rem;
+      color: var(--color-accent-1);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-suit.red {
+      color: #ff0000;
       box-shadow: 0 4px 16px color-mix(in srgb, var(--teal) 20%, transparent);
       transition: transform 0.3s ease;
       flex-shrink: 0;
@@ -696,10 +713,10 @@
   
   <!-- Theme Toggle -->
   <div class="theme-toggle">
-    <button class="theme-btn active" data-theme="casino" title="Casino">🎰</button>
-    <button class="theme-btn" data-theme="dev" title="Dev">🔥</button>
-    <button class="theme-btn" data-theme="high-roller" title="High Roller">💎</button>
-    <button class="theme-btn" data-theme="matric" title="Matrix">🐍</button>
+    <button class="theme-btn active" data-theme="casino" title="Casino"></button>
+    <button class="theme-btn" data-theme="dev" title="Dev"></button>
+    <button class="theme-btn" data-theme="high-roller" title="High Roller"></button>
+    <button class="theme-btn" data-theme="matric" title="Matrix"></button>
   </div>
   
   <main>
@@ -747,37 +764,37 @@
       
       <div class="features-grid">
         <div class="liquid-glass">
-          <div class="icon">🎰</div>
+          <div class="icon"><img id="feature-chipstack-large" src="assets/chipstack/50.svg" alt="Chips"></div>
           <h3>Provably Fair Shuffling</h3>
           <p>Our algorithm seeds from <code>Twitch frame hashes</code> – entropy you can verify. No more "rigged" accusations.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon">📊</div>
+          <div class="icon"><img id="feature-chipstack-small" src="assets/chipstack/21.svg" alt="Chips"></div>
           <h3>Complete Data Tracking</h3>
           <p>Every hand, every decision, every result. Encoded with a custom algorithm that compresses <code>MB → KB</code>.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon">🤖</div>
+          <div class="icon"><img src="assets/cards/back.png" alt="Card"></div>
           <h3>AI-Powered Analysis</h3>
           <p>LLM-chain powered breakdowns of your play. Not generic tips – analysis of <em>your</em> actual hands.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon">👥</div>
+          <div class="icon"><img src="assets/cards/spades_A.png" alt="Ace"></div>
           <h3>Friends, Clubs, Community</h3>
           <p>Play with anyone, anywhere, anytime. Private clubs, friend lists, and social features built in.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon">📈</div>
+          <div class="icon"><span id="feature-suit-black" class="feature-suit">♠</span></div>
           <h3>Real Analytics Dashboard</h3>
           <p>VPIP, PFR, aggression factor, positional stats. Every metric tracked and visualized beautifully.</p>
         </div>
         
         <div class="liquid-glass">
-          <div class="icon">🎓</div>
+          <div class="icon"><span id="feature-suit-red" class="feature-suit red">♥</span></div>
           <h3>Learning Center</h3>
           <p>Interactive lessons, practice scenarios, AI coaching. Master fundamentals and advanced concepts.</p>
         </div>
@@ -840,6 +857,14 @@
     // ===========================================
     let currentTheme = localStorage.getItem('pokergeek-theme') || 'casino';
     
+    // Feature chipstack variants (small stacks for different themes)
+    const FEATURE_CHIPSTACKS = {
+      'casino': 'assets/chipstack/21.svg',
+      'dev': 'assets/chipstack/22.svg',
+      'high-roller': 'assets/chipstack/23.svg',
+      'matric': 'assets/chipstack/24.svg'
+    };
+    
     function setTheme(theme) {
       currentTheme = theme;
       document.documentElement.setAttribute('data-theme', theme);
@@ -850,6 +875,10 @@
       
       // Update divider logo
       document.getElementById('divider-logo').src = LOGOS[theme];
+      
+      // Update feature chipstacks
+      document.getElementById('feature-chipstack-large').src = CHIP_STACKS[theme];
+      document.getElementById('feature-chipstack-small').src = FEATURE_CHIPSTACKS[theme];
       
       // Update active button
       document.querySelectorAll('.theme-btn').forEach(btn => {
@@ -899,6 +928,26 @@
     
     // Cycle every 1.5 seconds
     setInterval(cycleSuit, 1500);
+    
+    // ===========================================
+    // FEATURE CARD SUIT CYCLING
+    // ===========================================
+    const featureSuitBlack = document.getElementById('feature-suit-black');
+    const featureSuitRed = document.getElementById('feature-suit-red');
+    let blackSuitIndex = 0;
+    let redSuitIndex = 0;
+    
+    function cycleFeatureSuits() {
+      // Cycle black suit (spade ↔ club)
+      blackSuitIndex = (blackSuitIndex + 1) % blackSuits.length;
+      featureSuitBlack.textContent = blackSuits[blackSuitIndex];
+      
+      // Cycle red suit (heart ↔ diamond)
+      redSuitIndex = (redSuitIndex + 1) % redSuits.length;
+      featureSuitRed.textContent = redSuits[redSuitIndex];
+    }
+    
+    setInterval(cycleFeatureSuits, 2000);
     
     // ===========================================
     // FALLING CARDS ANIMATION
