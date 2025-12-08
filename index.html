@@ -251,8 +251,17 @@
       align-items: center;
       justify-content: center;
       padding: 2rem;
+      padding-top: 4rem;
       position: relative;
       z-index: 10;
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        padding-top: 5rem;
+        justify-content: flex-start;
+        padding-bottom: 3rem;
+      }
     }
     
     /* Casino Felt Table Borders */
@@ -305,6 +314,13 @@
       animation: chipFloat 4s ease-in-out infinite, chipWobble 6s ease-in-out infinite;
     }
     
+    @media (max-width: 768px) {
+      .chip-stack-container {
+        width: clamp(120px, 35vw, 180px);
+        margin-top: 1rem;
+      }
+    }
+    
     @media (min-width: 1024px) {
       .chip-stack-container {
         width: clamp(250px, 25vw, 400px);
@@ -335,7 +351,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
+      padding: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      .hero-text {
+        padding: 2rem;
+      }
     }
     
     @media (min-width: 1024px) {
@@ -353,11 +375,11 @@
     
     .hero h1 {
       font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(3rem, 10vw, 7rem);
+      font-size: clamp(2.5rem, 9vw, 7rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.05;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       color: var(--color-accent-1);
       display: flex;
       align-items: center;
@@ -484,43 +506,6 @@
       font-size: 0.9rem;
       color: #9aa3b2;
       text-align: center;
-    }
-    
-    /* ==========================================
-       LOGO DIVIDER SECTION
-    ========================================== */
-    .logo-divider {
-      position: relative;
-      padding: 1.5rem 1rem;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    
-    .logo-divider-svg {
-      width: clamp(150px, 25vw, 250px);
-      height: auto;
-      opacity: 0.8;
-      animation: logoDividerPulse 4s ease-in-out infinite, logoDividerSpin 60s linear infinite;
-      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
-    }
-    
-    @keyframes logoDividerPulse {
-      0%, 100% { 
-        opacity: 0.7;
-        filter: drop-shadow(0 0 30px color-mix(in srgb, var(--color-accent-2) 40%, transparent));
-      }
-      50% { 
-        opacity: 1;
-        filter: drop-shadow(0 0 60px color-mix(in srgb, var(--color-accent-2) 60%, transparent));
-      }
-    }
-    
-    @keyframes logoDividerSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
     
     /* ==========================================
@@ -861,9 +846,29 @@
       </div>
     </section>
     
-    <!-- Massive Logo Divider - Actual 18.svg -->
-    <section class="logo-divider">
-      <img id="divider-logo" class="logo-divider-svg" src="assets/logo-18.svg" alt="PokerGeek Logo">
+    <!-- Screenshot Carousel -->
+    <section class="screenshot-section">
+      <h2>See It In Action</h2>
+      <div class="carousel-container">
+        <div class="carousel-track" id="carousel-track">
+          <div class="carousel-slide"><img src="assets/screenshots/table-1.png" alt="PokerGeek Table"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130201.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/table-2.png" alt="PokerGeek Table"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130342.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/table-3.png" alt="PokerGeek Table"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130412.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/table-4.png" alt="PokerGeek Table"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130442.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/table-5.png" alt="PokerGeek Table"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130504.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130529.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130558.png" alt="PokerGeek Screenshot"></div>
+          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130616.png" alt="PokerGeek Screenshot"></div>
+        </div>
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
+        <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots"></div>
     </section>
     
     <!-- Features Section - 6 LiquidGlass Tiles -->
@@ -920,31 +925,6 @@
           <p>Interactive lessons, practice scenarios, AI coaching. Master fundamentals and advanced concepts.</p>
         </div>
       </div>
-    </section>
-    
-    <!-- Screenshot Carousel -->
-    <section class="screenshot-section">
-      <h2>See It In Action</h2>
-      <div class="carousel-container">
-        <div class="carousel-track" id="carousel-track">
-          <div class="carousel-slide"><img src="assets/screenshots/table-1.png" alt="PokerGeek Table 1"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/table-2.png" alt="PokerGeek Table 2"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/table-3.png" alt="PokerGeek Table 3"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/table-4.png" alt="PokerGeek Table 4"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/table-5.png" alt="PokerGeek Table 5"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130201.png" alt="PokerGeek Screenshot 1"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130342.png" alt="PokerGeek Screenshot 2"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130412.png" alt="PokerGeek Screenshot 3"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130442.png" alt="PokerGeek Screenshot 4"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130504.png" alt="PokerGeek Screenshot 5"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130529.png" alt="PokerGeek Screenshot 6"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130558.png" alt="PokerGeek Screenshot 7"></div>
-          <div class="carousel-slide"><img src="assets/screenshots/Screenshot_20251208_130616.png" alt="PokerGeek Screenshot 8"></div>
-        </div>
-        <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
-        <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
-      </div>
-      <div class="carousel-dots" id="carousel-dots"></div>
     </section>
     
     <!-- Footer -->
@@ -1017,9 +997,6 @@
       
       // Update chip stack
       document.getElementById('chip-stack-img').src = CHIP_STACKS[theme];
-      
-      // Update divider logo
-      document.getElementById('divider-logo').src = LOGOS[theme];
       
       // Update feature chipstacks
       document.getElementById('feature-chipstack-large').src = CHIP_STACKS[theme];
