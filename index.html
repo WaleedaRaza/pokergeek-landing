@@ -99,19 +99,29 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
       overflow: hidden;
     }
     
     .falling-card {
       position: absolute;
-      width: 50px;
-      height: 70px;
-      border-radius: 6px;
+      width: 45px;
+      height: 63px;
+      border-radius: 5px;
       background-size: cover;
       background-position: center;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
       animation: fallDown var(--duration) linear forwards;
+      opacity: 0.7;
+    }
+    
+    @media (max-width: 768px) {
+      .falling-card {
+        width: 28px;
+        height: 39px;
+        border-radius: 3px;
+        opacity: 0.5;
+      }
     }
     
     @keyframes fallDown {
@@ -972,15 +982,14 @@
       'matric': 'assets/logo-15.svg'        // lime green
     };
     
-    // Card images for falling cards
+    // Card images for falling cards (2:1 ratio of backs to fronts)
     const CARD_IMAGES = [
+      'assets/cards/back.png',
+      'assets/cards/back.png',
+      'assets/cards/back.png',
       'assets/cards/back.png',
       'assets/cards/spades_A.png',
       'assets/cards/hearts_K.png',
-      'assets/cards/diamonds_Q.png',
-      'assets/cards/clubs_J.png',
-      'assets/cards/spades_10.png',
-      'assets/cards/hearts_9.png',
     ];
     
     // ===========================================
@@ -1085,8 +1094,9 @@
     // ===========================================
     const cardsContainer = document.getElementById('falling-cards-container');
     let activeCards = 0;
-    const MAX_ACTIVE = 6;
-    const MIN_ACTIVE = 2;
+    const isMobile = window.innerWidth <= 768;
+    const MAX_ACTIVE = isMobile ? 3 : 6;
+    const MIN_ACTIVE = isMobile ? 1 : 2;
     
     function spawnCard() {
       if (activeCards >= MAX_ACTIVE) return;
