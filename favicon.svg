@@ -1,0 +1,46 @@
+<svg viewBox="0 0 225 225" xmlns="http://www.w3.org/2000/svg">
+  <!-- PokerGeek Favicon - Slot Dial Logo -->
+  <!-- Concentric circles -->
+  <circle cx="113" cy="111" r="54" fill="none" stroke="#FFD700" stroke-width="3"/>
+  <circle cx="113" cy="111" r="38" fill="none" stroke="#FFD700" stroke-width="3"/>
+  <circle cx="113" cy="111" r="28" fill="#004433"/>
+  <circle cx="113" cy="111" r="28" fill="none" stroke="#FFD700" stroke-width="3"/>
+  
+  <!-- Corner levers - Top Left -->
+  <line x1="45" y1="30" x2="70" y2="55" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="45" cy="30" r="5" fill="#FFD700"/>
+  
+  <!-- Corner levers - Top Right -->
+  <line x1="181" y1="30" x2="156" y2="55" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="181" cy="30" r="5" fill="#FFD700"/>
+  
+  <!-- Corner levers - Bottom Left -->
+  <line x1="45" y1="192" x2="70" y2="167" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="45" cy="192" r="5" fill="#FFD700"/>
+  
+  <!-- Corner levers - Bottom Right -->
+  <line x1="181" y1="192" x2="156" y2="167" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="181" cy="192" r="5" fill="#FFD700"/>
+  
+  <!-- Top lever -->
+  <line x1="113" y1="20" x2="113" y2="57" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="113" cy="20" r="5" fill="#FFD700"/>
+  
+  <!-- Bottom lever -->
+  <line x1="113" y1="202" x2="113" y2="165" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="113" cy="202" r="5" fill="#FFD700"/>
+  
+  <!-- Left lever -->
+  <line x1="20" y1="111" x2="57" y2="111" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="20" cy="111" r="5" fill="#FFD700"/>
+  
+  <!-- Right lever -->
+  <line x1="206" y1="111" x2="169" y2="111" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="206" cy="111" r="5" fill="#FFD700"/>
+  
+  <!-- Center 3 dots ONLY (slot machine face) -->
+  <circle cx="100" cy="118" r="4" fill="#FFD700"/>
+  <circle cx="113" cy="100" r="4" fill="#FFD700"/>
+  <circle cx="126" cy="118" r="4" fill="#FFD700"/>
+</svg>
+

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="casino">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokerGeek.ai – Poker, Perfected</title>
+  <meta name="description" content="A poker platform built for players who demand better. Provably fair shuffling, AI-powered analytics, and a complete ecosystem. Join the waitlist.">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="PokerGeek.ai – Poker, Perfected">
+  <meta property="og:description" content="Tired of rigged shuffling and trash poker sites? We built something better.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pokergeek.ai">
+  
+  <!-- Favicon - Logo Dial -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================
+       THEME SYSTEM - Matches PokerGeek App
+    ========================================== */
+    :root {
+      /* Casino Theme (Default) */
+      --color-green: #004433;
+      --color-mahogany: #2c1412;
+      --color-accent-1: #ffffff;
+      --color-accent-2: #FFD700;
+      --color-accent-3: #4169E1;
+      --color-accent-4: #DC143C;
+      --teal: #00d4aa;
+      --bg-primary: #004433;
+    }
+    
+    [data-theme="dev"] {
+      --color-green: #010009;
+      --color-mahogany: #0a1929;
+      --color-accent-1: #ffffff;
+      --color-accent-2: #ff4400;
+      --color-accent-3: #00d4aa;
+      --color-accent-4: #ff4400;
+      --teal: #00d4aa;
+      --bg-primary: #020015;
+    }
+    
+    [data-theme="high-roller"] {
+      --color-green: #000000;
+      --color-mahogany: #000000;
+      --color-accent-1: #ffffff;
+      --color-accent-2: #ff0000;
+      --color-accent-3: #c0c0c0;
+      --color-accent-4: #FFD700;
+      --teal: #ff0000;
+      --bg-primary: #000000;
+    }
+    
+    [data-theme="matric"] {
+      --color-green: #000000;
+      --color-mahogany: #000000;
+      --color-accent-1: #ffffff;
+      --color-accent-2: #00ff00;
+      --color-accent-3: #00ff00;
+      --color-accent-4: #00ff00;
+      --teal: #00ff00;
+      --bg-primary: #000000;
+    }
+    
+    /* ==========================================
+       BASE STYLES
+    ========================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--color-accent-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s ease;
+    }
+    
+    /* ==========================================
+       FALLING CARDS CONTAINER
+    ========================================== */
+    #falling-cards-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .falling-card {
+      position: absolute;
+      width: 50px;
+      height: 70px;
+      border-radius: 6px;
+      background-size: cover;
+      background-position: center;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+      animation: fallDown var(--duration) linear forwards;
+    }
+    
+    @keyframes fallDown {
+      from {
+        transform: translateY(-100px) rotate(var(--rot-start));
+        opacity: 1;
+      }
+      to {
+        transform: translateY(calc(100vh + 100px)) rotate(var(--rot-end));
+        opacity: 0.7;
+      }
+    }
+    
+    /* ==========================================
+       INTERACTIVE PULL ROPE
+    ========================================== */
+    .pull-rope-container {
+      position: fixed;
+      top: 0;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .rope-anchor {
+      width: 24px;
+      height: 24px;
+      background: var(--color-accent-2);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--color-accent-2);
+    }
+    
+    .rope-line {
+      width: 4px;
+      height: 32px;
+      background: linear-gradient(180deg, var(--color-accent-2) 0%, color-mix(in srgb, var(--color-accent-2) 60%, #000) 100%);
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+    
+    .rope-handle {
+      width: 48px;
+      height: 48px;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }
+    
+    .rope-handle:active {
+      cursor: grabbing;
+    }
+    
+    .rope-handle:hover {
+      transform: scale(1.1);
+    }
+    
+    .rope-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--color-accent-2) 0%, color-mix(in srgb, var(--color-accent-2) 70%, #000) 100%);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-2) 60%, transparent), 
+                  0 0 40px color-mix(in srgb, var(--color-accent-2) 40%, transparent);
+      animation: logoGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes logoGlow {
+      0%, 100% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-2) 60%, transparent); }
+      50% { box-shadow: 0 0 30px color-mix(in srgb, var(--color-accent-2) 80%, transparent), 0 0 60px color-mix(in srgb, var(--color-accent-2) 60%, transparent); }
+    }
+    
+    /* ==========================================
+       THEME TOGGLE
+    ========================================== */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 2000;
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .theme-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .theme-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .theme-btn.active {
+      border-color: var(--color-accent-1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    
+    .theme-btn[data-theme="casino"] { background: #004433; }
+    .theme-btn[data-theme="dev"] { background: linear-gradient(135deg, #020015 0%, #ff4400 100%); }
+    .theme-btn[data-theme="high-roller"] { background: linear-gradient(135deg, #000 0%, #ff0000 100%); }
+    .theme-btn[data-theme="matric"] { background: linear-gradient(135deg, #000 0%, #00ff00 100%); }
+    
+    /* ==========================================
+       HERO SECTION
+    ========================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* Casino Felt Table Borders */
+    .table-border-outer {
+      position: absolute;
+      top: 2rem; left: 1rem; right: 1rem; bottom: 3rem;
+      border: 3px solid rgba(255, 255, 255, 0.75);
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3), inset 0 0 4px rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+    
+    .table-border-inner {
+      position: absolute;
+      top: 4rem; left: 2rem; right: 2rem; bottom: 5rem;
+      border: 3px solid rgba(255, 255, 255, 0.75);
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3), inset 0 0 4px rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+    
+    @media (min-width: 768px) {
+      .table-border-outer { top: 4rem; left: 2rem; right: 2rem; bottom: 5rem; }
+      .table-border-inner { top: 6rem; left: 4rem; right: 4rem; bottom: 7rem; }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 1400px;
+      width: 100%;
+    }
+    
+    @media (min-width: 1024px) {
+      .hero-content {
+        flex-direction: row;
+        justify-content: center;
+        gap: 4rem;
+      }
+    }
+    
+    /* Chip Stack */
+    .chip-stack-container {
+      flex-shrink: 0;
+      width: clamp(180px, 20vw, 350px);
+      animation: chipFloat 4s ease-in-out infinite, chipWobble 6s ease-in-out infinite;
+    }
+    
+    @media (min-width: 1024px) {
+      .chip-stack-container {
+        width: clamp(250px, 25vw, 400px);
+      }
+    }
+    
+    @keyframes chipFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    @keyframes chipWobble {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(1deg); }
+      40% { transform: rotate(-1deg); }
+      60% { transform: rotate(0.5deg); }
+      80% { transform: rotate(-0.5deg); }
+    }
+    
+    .chip-stack-container img {
+      width: 100%;
+      height: auto;
+    }
+    
+    /* Hero Text */
+    .hero-text {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    @media (min-width: 1024px) {
+      .hero-text {
+        padding: 3rem;
+      }
+    }
+    
+    /* Logo */
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      color: var(--color-accent-1);
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+    }
+    
+    /* Cycling suit - matches SpinningSuit component */
+    .cycling-suit {
+      display: inline-block;
+      width: 0.5em;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7em;
+      line-height: 1;
+      margin-left: 0.15em;
+      transition: color 0.3s ease;
+    }
+    
+    .cycling-suit.red { color: #ff0000; }
+    .cycling-suit.black { color: #ffffff; }
+    
+    @keyframes suitFlip {
+      0% { opacity: 0; transform: translateY(-10px) rotateX(-90deg); }
+      100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+    }
+    
+    .suit-animate {
+      animation: suitFlip 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+    
+    .tagline strong {
+      color: var(--color-accent-2);
+    }
+    
+    /* Signup Form */
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 480px;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .signup-form input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      color: var(--color-accent-1);
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .signup-form input:focus {
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+    
+    .signup-form input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .signup-form button {
+      background: transparent;
+      color: var(--color-accent-1);
+      border: 3px solid var(--color-accent-1);
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .signup-form button:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 12px 32px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-message {
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .form-message.success {
+      display: block;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #00ff88;
+    }
+    
+    .form-message.error {
+      display: block;
+      background: rgba(255, 68, 68, 0.15);
+      border: 1px solid rgba(255, 68, 68, 0.4);
+      color: #ff4444;
+    }
+    
+    .waitlist-note {
+      font-size: 0.9rem;
+      color: #9aa3b2;
+      text-align: center;
+    }
+    
+    /* ==========================================
+       LOGO DIVIDER SECTION
+    ========================================== */
+    .logo-divider {
+      position: relative;
+      padding: 4rem 2rem;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .logo-divider-svg {
+      width: clamp(400px, 60vw, 800px);
+      height: auto;
+      opacity: 0.9;
+      animation: logoDividerPulse 4s ease-in-out infinite, logoDividerSpin 60s linear infinite;
+      filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
+    }
+    
+    @keyframes logoDividerPulse {
+      0%, 100% { 
+        opacity: 0.7;
+        filter: drop-shadow(0 0 30px color-mix(in srgb, var(--color-accent-2) 40%, transparent));
+      }
+      50% { 
+        opacity: 1;
+        filter: drop-shadow(0 0 60px color-mix(in srgb, var(--color-accent-2) 60%, transparent));
+      }
+    }
+    
+    @keyframes logoDividerSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* ==========================================
+       FEATURES SECTION - 6 LIQUID GLASS TILES
+    ========================================== */
+    .features-section {
+      position: relative;
+      padding: 4rem 2rem;
+      z-index: 10;
+    }
+    
+    .section-border {
+      position: absolute;
+      left: 1rem; right: 1rem;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+    }
+    
+    .section-border.top { top: 0; }
+    .section-border.bottom { bottom: 0; }
+    
+    @media (min-width: 768px) {
+      .section-border { left: 2rem; right: 2rem; }
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* LiquidGlass Card */
+    .liquid-glass {
+      position: relative;
+      padding: 2rem;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 20px -5px rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    
+    .liquid-glass:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 60px color-mix(in srgb, var(--teal) 15%, transparent);
+    }
+    
+    .liquid-glass .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--teal) 25%, transparent) 0%, color-mix(in srgb, var(--teal) 15%, transparent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--teal);
+      font-size: 1.75rem;
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--teal) 20%, transparent);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .liquid-glass:hover .icon {
+      transform: scale(1.1);
+    }
+    
+    .liquid-glass h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      font-weight: 700;
+      color: var(--color-accent-1);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    
+    .liquid-glass p {
+      font-size: 0.95rem;
+      color: #9aa3b2;
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+    
+    .liquid-glass code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      background: color-mix(in srgb, var(--teal) 15%, transparent);
+      color: var(--teal);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    
+    /* ==========================================
+       FOOTER
+    ========================================== */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+    
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .footer-brand span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+    
+    .footer-brand .dot { color: rgba(255, 255, 255, 0.4); }
+    .footer-brand .year { font-size: 0.875rem; color: rgba(255, 255, 255, 0.6); font-weight: 400; }
+    
+    footer nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    footer nav a {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    footer nav a:hover { color: var(--color-accent-1); }
+    
+    /* Responsive */
+    @media (max-width: 640px) {
+      .input-group { flex-direction: column; }
+      .signup-form button { width: 100%; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling Cards Container -->
+  <div id="falling-cards-container"></div>
+  
+  <!-- Interactive Pull Rope -->
+  <div class="pull-rope-container" id="pull-rope">
+    <div class="rope-anchor"></div>
+    <div class="rope-line" id="rope-line"></div>
+    <div class="rope-handle" id="rope-handle">
+      <div class="rope-logo"></div>
+    </div>
+  </div>
+  
+  <!-- Theme Toggle -->
+  <div class="theme-toggle">
+    <button class="theme-btn active" data-theme="casino" title="Casino">🎰</button>
+    <button class="theme-btn" data-theme="dev" title="Dev">🔥</button>
+    <button class="theme-btn" data-theme="high-roller" title="High Roller">💎</button>
+    <button class="theme-btn" data-theme="matric" title="Matrix">🐍</button>
+  </div>
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="table-border-outer"></div>
+      <div class="table-border-inner"></div>
+      
+      <div class="hero-content">
+        <!-- Chip Stack -->
+        <div class="chip-stack-container">
+          <img id="chip-stack-img" src="assets/chipstack/50.svg" alt="PokerGeek Chip Stack">
+        </div>
+        
+        <!-- Hero Text -->
+        <div class="hero-text">
+          <h1>PokerGeek<span id="cycling-suit" class="cycling-suit red">♥</span></h1>
+          
+          <p class="tagline">
+            Tired of rigged shuffling and trash poker sites?<br>
+            We built something <strong>better</strong>.
+          </p>
+          
+          <form class="signup-form" id="waitlist-form">
+            <div class="input-group">
+              <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+              <button type="submit">Join Waitlist</button>
+            </div>
+            <div class="form-message" id="form-message"></div>
+            <p class="waitlist-note">Be first in line. MVP launching end of 2025.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Massive Logo Divider - Actual 18.svg -->
+    <section class="logo-divider">
+      <img id="divider-logo" class="logo-divider-svg" src="assets/logo-18.svg" alt="PokerGeek Logo">
+    </section>
+    
+    <!-- Features Section - 6 LiquidGlass Tiles -->
+    <section class="features-section">
+      <div class="section-border top"></div>
+      <div class="section-border bottom"></div>
+      
+      <div class="features-grid">
+        <div class="liquid-glass">
+          <div class="icon">🎰</div>
+          <h3>Provably Fair Shuffling</h3>
+          <p>Our algorithm seeds from <code>Twitch frame hashes</code> – entropy you can verify. No more "rigged" accusations.</p>
+        </div>
+        
+        <div class="liquid-glass">
+          <div class="icon">📊</div>
+          <h3>Complete Data Tracking</h3>
+          <p>Every hand, every decision, every result. Encoded with a custom algorithm that compresses <code>MB → KB</code>.</p>
+        </div>
+        
+        <div class="liquid-glass">
+          <div class="icon">🤖</div>
+          <h3>AI-Powered Analysis</h3>
+          <p>LLM-chain powered breakdowns of your play. Not generic tips – analysis of <em>your</em> actual hands.</p>
+        </div>
+        
+        <div class="liquid-glass">
+          <div class="icon">👥</div>
+          <h3>Friends, Clubs, Community</h3>
+          <p>Play with anyone, anywhere, anytime. Private clubs, friend lists, and social features built in.</p>
+        </div>
+        
+        <div class="liquid-glass">
+          <div class="icon">📈</div>
+          <h3>Real Analytics Dashboard</h3>
+          <p>VPIP, PFR, aggression factor, positional stats. Every metric tracked and visualized beautifully.</p>
+        </div>
+        
+        <div class="liquid-glass">
+          <div class="icon">🎓</div>
+          <h3>Learning Center</h3>
+          <p>Interactive lessons, practice scenarios, AI coaching. Master fundamentals and advanced concepts.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span>PokerGeek</span>
+          <span class="dot">•</span>
+          <span class="year">© 2025</span>
+        </div>
+        <nav>
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+          <a href="#support">Support</a>
+        </nav>
+      </div>
+    </footer>
+  </main>
+  
+  <script>
+    // ===========================================
+    // CONFIGURATION
+    // ===========================================
+    const SUPABASE_URL = 'https://scvqtpkzyqfccskbsdny.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjdnF0cGt6eXFmY2Nza2JzZG55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyMTExOTcsImV4cCI6MjA4MDc4NzE5N30.GfrSAOn_Lxoln_l220tgvaD5NEhbxIUBRaGUxEvIvhY';
+    
+    // Theme-specific chip stacks
+    const CHIP_STACKS = {
+      'casino': 'assets/chipstack/50.svg',
+      'dev': 'assets/chipstack/37.svg',
+      'high-roller': 'assets/chipstack/38.svg',
+      'matric': 'assets/chipstack/PokerGeek.AI (300 x 300 px) (10).svg'
+    };
+    
+    // Theme-specific logos (18.svg = casino/white, 19.svg = high-roller/red variant)
+    const LOGOS = {
+      'casino': 'assets/logo-18.svg',       // dark green/white
+      'dev': 'assets/logo-16.svg',          // orange
+      'high-roller': 'assets/logo-19.svg',  // red
+      'matric': 'assets/logo-15.svg'        // lime green
+    };
+    
+    // Card images for falling cards
+    const CARD_IMAGES = [
+      'assets/cards/back.png',
+      'assets/cards/spades_A.png',
+      'assets/cards/hearts_K.png',
+      'assets/cards/diamonds_Q.png',
+      'assets/cards/clubs_J.png',
+      'assets/cards/spades_10.png',
+      'assets/cards/hearts_9.png',
+    ];
+    
+    // ===========================================
+    // THEME SYSTEM
+    // ===========================================
+    let currentTheme = localStorage.getItem('pokergeek-theme') || 'casino';
+    
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('pokergeek-theme', theme);
+      
+      // Update chip stack
+      document.getElementById('chip-stack-img').src = CHIP_STACKS[theme];
+      
+      // Update divider logo
+      document.getElementById('divider-logo').src = LOGOS[theme];
+      
+      // Update active button
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+      });
+    }
+    
+    // Initialize theme
+    setTheme(currentTheme);
+    
+    // Theme button listeners
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => setTheme(btn.dataset.theme));
+    });
+    
+    // ===========================================
+    // CYCLING SUIT ANIMATION (matches SpinningSuit)
+    // ===========================================
+    const redSuits = ['♥', '♦'];
+    const blackSuits = ['♣', '♠'];
+    let isRed = true;
+    let redIndex = 0;
+    let blackIndex = 0;
+    const suitEl = document.getElementById('cycling-suit');
+    
+    function cycleSuit() {
+      if (isRed) {
+        // Show black suit
+        suitEl.textContent = blackSuits[blackIndex];
+        suitEl.classList.remove('red');
+        suitEl.classList.add('black');
+        blackIndex = (blackIndex + 1) % blackSuits.length;
+        isRed = false;
+      } else {
+        // Show red suit
+        suitEl.textContent = redSuits[redIndex];
+        suitEl.classList.remove('black');
+        suitEl.classList.add('red');
+        redIndex = (redIndex + 1) % redSuits.length;
+        isRed = true;
+      }
+      // Trigger animation
+      suitEl.classList.remove('suit-animate');
+      void suitEl.offsetWidth; // Force reflow
+      suitEl.classList.add('suit-animate');
+    }
+    
+    // Cycle every 1.5 seconds
+    setInterval(cycleSuit, 1500);
+    
+    // ===========================================
+    // FALLING CARDS ANIMATION
+    // ===========================================
+    const cardsContainer = document.getElementById('falling-cards-container');
+    let activeCards = 0;
+    const MAX_ACTIVE = 6;
+    const MIN_ACTIVE = 2;
+    
+    function spawnCard() {
+      if (activeCards >= MAX_ACTIVE) return;
+      
+      const card = document.createElement('div');
+      card.className = 'falling-card';
+      card.style.backgroundImage = `url('${CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]}')`;
+      card.style.left = `${Math.random() * 90 + 5}%`;
+      card.style.setProperty('--rot-start', `${Math.random() * 40 - 20}deg`);
+      card.style.setProperty('--rot-end', `${Math.random() * 60 - 30}deg`);
+      card.style.setProperty('--duration', `${7 + Math.random() * 5}s`);
+      
+      cardsContainer.appendChild(card);
+      activeCards++;
+      
+      // Remove after animation
+      const duration = parseFloat(card.style.getPropertyValue('--duration')) * 1000;
+      setTimeout(() => {
+        card.remove();
+        activeCards--;
+      }, duration);
+    }
+    
+    // Start ongoing falling cards
+    function startFallingCards() {
+      // Initial spawn
+      while (activeCards < MIN_ACTIVE) spawnCard();
+      
+      // Schedule ongoing spawns
+      setInterval(() => {
+        if (activeCards < MAX_ACTIVE && Math.random() > 0.5) {
+          spawnCard();
+        }
+      }, 2000);
+    }
+    
+    setTimeout(startFallingCards, 500);
+    
+    // ===========================================
+    // INTERACTIVE PULL ROPE
+    // ===========================================
+    const ropeHandle = document.getElementById('rope-handle');
+    const ropeLine = document.getElementById('rope-line');
+    let isDragging = false;
+    let startY = 0;
+    let pullDistance = 0;
+    const MAX_PULL = 200;
+    
+    function releaseCards(count) {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const card = document.createElement('div');
+          card.className = 'falling-card';
+          card.style.backgroundImage = `url('${CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]}')`;
+          // Full page spread - 5% to 95% width
+          card.style.left = `${5 + Math.random() * 90}%`;
+          card.style.setProperty('--rot-start', `${Math.random() * 60 - 30}deg`);
+          card.style.setProperty('--rot-end', `${Math.random() * 90 - 45}deg`);
+          card.style.setProperty('--duration', `${3 + Math.random() * 2}s`);
+          
+          cardsContainer.appendChild(card);
+          
+          const duration = parseFloat(card.style.getPropertyValue('--duration')) * 1000;
+          setTimeout(() => card.remove(), duration);
+        }, i * 50);
+      }
+    }
+    
+    ropeHandle.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      ropeHandle.style.cursor = 'grabbing';
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      pullDistance = Math.min(MAX_PULL, Math.max(0, e.clientY - startY));
+      ropeHandle.style.transform = `translateY(${pullDistance}px)`;
+      ropeLine.style.height = `${32 + pullDistance}px`;
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      ropeHandle.style.cursor = 'grab';
+      
+      // Release cards based on pull distance
+      const progress = pullDistance / MAX_PULL;
+      if (progress > 0.3) {
+        const cardCount = progress > 0.85 ? 15 + Math.floor(Math.random() * 5) :
+                         progress > 0.6 ? 8 + Math.floor(Math.random() * 4) :
+                         3 + Math.floor(Math.random() * 2);
+        releaseCards(cardCount);
+      }
+      
+      // Spring back
+      ropeHandle.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      ropeLine.style.transition = 'height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      ropeHandle.style.transform = 'translateY(0)';
+      ropeLine.style.height = '32px';
+      
+      setTimeout(() => {
+        ropeHandle.style.transition = '';
+        ropeLine.style.transition = '';
+      }, 500);
+      
+      pullDistance = 0;
+    });
+    
+    // Touch support
+    ropeHandle.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startY = e.touches[0].clientY;
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      pullDistance = Math.min(MAX_PULL, Math.max(0, e.touches[0].clientY - startY));
+      ropeHandle.style.transform = `translateY(${pullDistance}px)`;
+      ropeLine.style.height = `${32 + pullDistance}px`;
+    });
+    
+    document.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const progress = pullDistance / MAX_PULL;
+      if (progress > 0.3) {
+        const cardCount = progress > 0.85 ? 15 : progress > 0.6 ? 8 : 3;
+        releaseCards(cardCount);
+      }
+      
+      ropeHandle.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      ropeLine.style.transition = 'height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      ropeHandle.style.transform = 'translateY(0)';
+      ropeLine.style.height = '32px';
+      
+      setTimeout(() => {
+        ropeHandle.style.transition = '';
+        ropeLine.style.transition = '';
+      }, 500);
+      
+      pullDistance = 0;
+    });
+    
+    // ===========================================
+    // WAITLIST FORM
+    // ===========================================
+    const form = document.getElementById('waitlist-form');
+    const messageEl = document.getElementById('form-message');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = form.email.value.trim();
+      const button = form.querySelector('button');
+      
+      messageEl.className = 'form-message';
+      messageEl.textContent = '';
+      
+      if (!email || !email.includes('@')) {
+        messageEl.className = 'form-message error';
+        messageEl.textContent = 'Please enter a valid email address.';
+        return;
+      }
+      
+      button.disabled = true;
+      button.textContent = 'Joining...';
+      
+      try {
+        if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+          await new Promise(r => setTimeout(r, 1000));
+          messageEl.className = 'form-message success';
+          messageEl.textContent = '🎉 You\'re on the list! We\'ll be in touch.';
+          form.email.value = '';
+        } else {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ email, source: 'reddit', created_at: new Date().toISOString() })
+          });
+          
+          if (response.ok || response.status === 201) {
+            messageEl.className = 'form-message success';
+            messageEl.textContent = '🎉 You\'re on the list! We\'ll be in touch.';
+            form.email.value = '';
+          } else if (response.status === 409) {
+            messageEl.className = 'form-message success';
+            messageEl.textContent = '👋 You\'re already on the list!';
+          } else {
+            throw new Error('Failed');
+          }
+        }
+      } catch (error) {
+        messageEl.className = 'form-message error';
+        messageEl.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Join Waitlist';
+      }
+    });
+  </script>
+</body>
+</html>
