@@ -1092,7 +1092,7 @@
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
               'Prefer': 'return=minimal'
             },
-            body: JSON.stringify({ email, source: 'reddit', created_at: new Date().toISOString() })
+            body: JSON.stringify({ email })
           });
           
           if (response.ok || response.status === 201) {
