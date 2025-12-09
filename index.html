@@ -509,6 +509,86 @@
       text-align: center;
     }
     
+    /* Share Section */
+    .share-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: center;
+      width: 100%;
+      max-width: 480px;
+    }
+    
+    .share-badge-text {
+      font-size: 0.95rem;
+      color: var(--color-accent-2);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .share-badge-text .badge-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--color-accent-2) 0%, color-mix(in srgb, var(--color-accent-2) 70%, #000) 100%);
+      border-radius: 50%;
+      font-size: 0.9rem;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px color-mix(in srgb, var(--color-accent-2) 40%, transparent); }
+      50% { transform: scale(1.1); box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-2) 60%, transparent); }
+    }
+    
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: transparent;
+      color: var(--color-accent-2);
+      border: 2px solid var(--color-accent-2);
+      padding: 0.875rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent-2) 30%, transparent);
+      background: color-mix(in srgb, var(--color-accent-2) 10%, transparent);
+    }
+    
+    .share-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+    
+    .share-feedback {
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      color: var(--teal);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .share-feedback.show {
+      opacity: 1;
+    }
+    
     /* ==========================================
        FEATURES SECTION - 6 LIQUID GLASS TILES
     ========================================== */
@@ -844,6 +924,19 @@
             <div class="form-message" id="form-message"></div>
             <p class="waitlist-note">Be first in line.</p>
           </form>
+          
+          <!-- Share Section -->
+          <div class="share-section">
+            <p class="share-badge-text">
+              <span class="badge-icon">🏆</span>
+              <span>Share & earn a <strong>Founder Badge</strong> at launch!</span>
+            </p>
+            <button class="share-btn" id="share-btn">
+              <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+              Share PokerGeek
+            </button>
+            <p class="share-feedback" id="share-feedback">Link copied!</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1324,6 +1417,61 @@
     
     // Auto-advance every 5 seconds
     setInterval(() => moveCarousel(1), 5000);
+    
+    // ===========================================
+    // SHARE FUNCTIONALITY
+    // ===========================================
+    const shareBtn = document.getElementById('share-btn');
+    const shareFeedback = document.getElementById('share-feedback');
+    
+    const shareData = {
+      title: 'PokerGeek.AI',
+      text: 'Check out PokerGeek.AI — verifiable shuffles, real analytics, built by players for players. Free to play, launching Jan 1, 2026!',
+      url: 'https://pokergeek.ai'
+    };
+    
+    shareBtn.addEventListener('click', async () => {
+      // Try Web Share API first (works great on mobile)
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          showShareFeedback('Thanks for sharing! 🎉');
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            // User didn't cancel, fall back to copy
+            copyToClipboard();
+          }
+        }
+      } else {
+        // Fallback: copy link to clipboard
+        copyToClipboard();
+      }
+    });
+    
+    function copyToClipboard() {
+      navigator.clipboard.writeText(shareData.url).then(() => {
+        showShareFeedback('Link copied! Share it anywhere 🎯');
+      }).catch(() => {
+        // Final fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = shareData.url;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showShareFeedback('Link copied! Share it anywhere 🎯');
+      });
+    }
+    
+    function showShareFeedback(message) {
+      shareFeedback.textContent = message;
+      shareFeedback.classList.add('show');
+      setTimeout(() => {
+        shareFeedback.classList.remove('show');
+      }, 3000);
+    }
   </script>
 </body>
 </html>
